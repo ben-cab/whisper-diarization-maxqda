@@ -13,8 +13,11 @@ from omegaconf import OmegaConf
 
 
 class MSDDDiarizer:
-    def __init__(self, device: Union[str, torch.device]):
-        self.model: NeuralDiarizer = NeuralDiarizer(cfg=create_config()).to(device)
+    def __init__(self, device: Union[str, torch.device], num_speakers: int = None):
+        # num_speakers=None -> Sprecherzahl wird automatisch geschaetzt.
+        # num_speakers=2    -> genau 2 Sprecher erzwingen (Oracle-Modus).
+        self.num_speakers = num_speakers
+        self.model: NeuralDiarizer = NeuralDiarizer(cfg=create_config(num_speakers)).to(device)
 
     def diarize(self, audio: torch.Tensor):
         with tempfile.TemporaryDirectory() as temp_path:
@@ -32,6 +35,7 @@ class MSDDDiarizer:
                 "duration": None,
                 "label": "infer",
                 "text": "-",
+                "num_speakers": self.num_speakers,
                 "rttm_filepath": None,
                 "uem_filepath": None,
             }
@@ -42,7 +46,7 @@ class MSDDDiarizer:
             self.model._initialize_configs(
                 manifest_path=manifest_path,
                 max_speakers=8,
-                num_speakers=None,
+                num_speakers=self.num_speakers,
                 tmpdir=temp_path,
                 batch_size=24,
                 num_workers=0,
@@ -71,7 +75,7 @@ class MSDDDiarizer:
         return labels
 
 
-def create_config():
+def create_config(num_speakers: int = None):
     config = OmegaConf.load(os.path.join(os.path.dirname(__file__), "diar_infer_telephonic.yaml"))
     pretrained_vad = "vad_multilingual_marblenet"
     pretrained_speaker_model = "titanet_large"
@@ -80,7 +84,8 @@ def create_config():
     config.diarizer.manifest_filepath = None
     config.diarizer.speaker_embeddings.model_path = pretrained_speaker_model
     config.diarizer.oracle_vad = False  # compute VAD provided with model_path to vad config
-    config.diarizer.clustering.parameters.oracle_num_speakers = False
+    # Bei fester Sprecherzahl den Oracle-Modus aktivieren, sonst automatisch schaetzen.
+    config.diarizer.clustering.parameters.oracle_num_speakers = num_speakers is not None
 
     # Here, we use our in-house pretrained NeMo VAD model
     config.diarizer.vad.model_path = pretrained_vad

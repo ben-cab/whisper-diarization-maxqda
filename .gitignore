@@ -4,4 +4,12 @@ __pycache__/
 *.wav
 *.mp3
 *.m4a
+*.mp4
 
+
+# Interviewdaten und lokale Ordner nicht veröffentlichen
+!marketing_terms.txt
+aTraingVGL/
+temp_outputs_*/
+.vscode/
+*_maxqda.txt

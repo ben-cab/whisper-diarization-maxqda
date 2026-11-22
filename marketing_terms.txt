@@ -1,0 +1,142 @@
+# Kontextbegriffe fuer die Transkription der Experteninterviews (MarTech/AdTech).
+# Englische Fachbegriffe, damit Whisper sie im deutschen Redefluss korrekt schreibt.
+# Zeilen mit # werden ignoriert.
+# WICHTIG: Whisper nutzt intern nur ~200 Tokens der Liste -> das Wichtigste zuerst.
+# Reihenfolge = Prioritaet (oben = am wichtigsten). Unwichtiges unten notfalls loeschen.
+
+# --- Branche / Kernbegriffe ---
+MarTech
+AdTech
+AdForm
+Adform
+Walled Gardens
+Walled Garden
+Programmatic Advertising
+Contextual Targeting
+Contextual Advertising
+Behavioral Targeting
+Brand Safety
+Real Time Bidding
+Retail Media
+Commerce Media
+Customer Journey
+Customer Touchpoints
+Touchpoints
+Messy Middle
+Social Search
+
+# --- Daten & Datenschutz ---
+First-Party Data
+Third-Party Data
+Zero-Party Data
+Third-Party Cookies
+Privacy-First
+Privacy by Design
+Device Fingerprinting
+User-Agent-Spoofing
+GDPR
+CCPA
+PIPL
+Digital Markets Act
+Data Act
+
+# --- Plattform-Typen / Akronyme ---
+DSP
+Demand Side Platform
+SSP
+Supply Side Platform
+DMP
+Data Management Platform
+Ad Exchange
+Ad Server
+Publisher Ad Server
+Sell Side
+Buy Side
+Frequency Capping
+Ad Impressions
+Impressions
+Unified ID 2.0
+UID2
+EUID
+Privacy Sandbox
+
+# --- Unternehmen / Plattformen ---
+Google
+Meta
+Amazon
+Alphabet
+The Trade Desk
+Deloitte
+McKinsey
+IAB Europe
+WeChat
+Tencent
+Alibaba
+TikTok
+Douyin
+Walmart
+Target
+REWE Group
+Catena-X
+ChatGPT
+Gemini
+YouTube
+Google Search
+Google Chrome
+Instagram
+LinkedIn
+WebEx
+Scopus
+
+# --- KI / Technologie ---
+GenAI
+Generative AI
+LLM
+LLMs
+Machine Learning
+Big Data
+Big Data Analytics
+Internet of Things
+Blockchain
+Marketing Mix Models
+Black Box
+
+# --- KPIs / Metriken ---
+Click-Through-Rate
+Return on Investment
+Return on Advertising Spend
+Key Performance Indicator
+KPI
+Conversion
+Conversion Rate
+
+# --- Theorien / Frameworks ---
+Principal-Agent
+Hidden Characteristics
+Hidden Actions
+Hidden Information
+Strategic Action Fields
+Incumbents
+Challengers
+Governance Units
+Resource Endowments
+Resource Dependence Theory
+Privacy Calculus Theory
+Technology Acceptance Model
+Utility Maximization Theory
+Surveillance Capitalism
+PRISMA
+
+# --- Weitere Konzepte ---
+Multihoming
+Consumer Multihoming
+Disintermediation
+Spillover
+Whitelisting
+Blacklists
+Endorser
+Virtual Influencers
+Open Source
+Sandboxing
+Super-Apps
+Hyperpersonalization

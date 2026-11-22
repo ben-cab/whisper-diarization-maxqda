@@ -93,7 +93,42 @@ parser.add_argument(
     help="Choose the diarization model to use",
 )
 
+parser.add_argument(
+    "--num-speakers",
+    type=int,
+    dest="num_speakers",
+    default=None,
+    help="Feste Anzahl Sprecher erzwingen (nur MSDD), z.B. 2. "
+    "Ohne Angabe wird die Sprecherzahl automatisch geschaetzt.",
+)
+
+parser.add_argument(
+    "--hotwords",
+    dest="hotwords",
+    default=None,
+    help="Kontextbegriffe (String), die die Transkription biasen, z.B. "
+    "englische Marketingbegriffe im deutschen Text.",
+)
+
+parser.add_argument(
+    "--prompt-file",
+    dest="prompt_file",
+    default=None,
+    help="Textdatei mit Kontextbegriffen (eine pro Zeile oder Freitext). "
+    "Wird als Hotwords an Whisper uebergeben.",
+)
+
 args = parser.parse_args()
+
+# Kontextbegriffe einsammeln: --hotwords und/oder --prompt-file
+hotwords = args.hotwords
+if args.prompt_file:
+    with open(args.prompt_file, encoding="utf-8") as pf:
+        # Leerzeilen und Kommentarzeilen (#) ignorieren
+        terms = [line.strip() for line in pf if line.strip() and not line.lstrip().startswith("#")]
+    file_terms = ", ".join(terms)
+    hotwords = f"{hotwords}, {file_terms}".strip(", ") if hotwords else file_terms
+
 language = process_language_arg(args.language, args.model_name)
 
 if args.stemming:
@@ -138,6 +173,7 @@ if args.batch_size > 0:
         language,
         suppress_tokens=suppress_tokens,
         batch_size=args.batch_size,
+        hotwords=hotwords,
     )
 else:
     transcript_segments, info = whisper_model.transcribe(
@@ -145,6 +181,7 @@ else:
         language,
         suppress_tokens=suppress_tokens,
         vad_filter=True,
+        hotwords=hotwords,
     )
 
 full_transcript = "".join(segment.text for segment in transcript_segments)
@@ -187,9 +224,14 @@ word_timestamps = postprocess_results(text_starred, spans, stride, scores)
 if args.diarizer == "msdd":
     from diarization import MSDDDiarizer
 
-    diarizer_model = MSDDDiarizer(device=args.device)
+    diarizer_model = MSDDDiarizer(device=args.device, num_speakers=args.num_speakers)
 
 elif args.diarizer == "sortformer":
+    if args.num_speakers is not None:
+        logging.warning(
+            "--num-speakers wird von Sortformer ignoriert. "
+            "Fuer eine feste Sprecherzahl bitte --diarizer msdd verwenden."
+        )
     from diarization import SortformerDiarizer
 
     diarizer_model = SortformerDiarizer(device=args.device)
